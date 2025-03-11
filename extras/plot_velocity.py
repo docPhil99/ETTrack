@@ -26,9 +26,10 @@ counts_mot, bins_mot = np.histogram(flat_vels_mot,bins=30,range=(0,50))
 bins_mot = bins_mot*20/25  # correct for frame rate
 counts = counts /sum(counts)
 counts_mot = counts_mot /sum(counts_mot)
-
+fig = plt.figure(figsize= (6.4, 4.8))
 plt.stairs(counts, bins)
 plt.stairs(counts_mot, bins_mot)
 plt.xlabel('Pixel Velocity pixel/frame')
 plt.ylabel('Normalised counts')
 plt.show()
+fig.savefig('awesome_figure.png', dpi=300, bbox_inches='tight')
