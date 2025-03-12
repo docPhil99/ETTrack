@@ -5,20 +5,23 @@ import time
 import numpy as np
 import torch
 from cython_bbox import bbox_overlaps as bbox_ious
-
+from pathlib import Path
 
 
 class Trajectory_Dataloader():
     def __init__(self, args):
 
         self.args = args
-        self.data_dir = '/home/hxd/HybridSORT/datasets'
-        TRAIN_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/train'
-        TEST_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/val'
+        self.data_dir = args.data_dir # '/home/hxd/HybridSORT/datasets'
+        #TRAIN_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/train'
+        #TEST_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/val'
 
         if self.args.dataset == 'MOT17':
-            self.data_dirs = os.listdir(TRAIN_DATA_PATH)
-            test_dirs = os.listdir(TEST_DATA_PATH)
+            self.train_data_path = self.data_dir/Path('MOT17/train')
+            self.test_data_path = self.data_dir / Path('MOT17/test')
+
+            self.data_dirs = os.listdir(self.train_data_path)
+            test_dirs = os.listdir(self.test_data_path)
             for seq in sorted(self.data_dirs):
                 if '.DS_Store' in seq or '.ipy' in seq:
                     self.data_dirs.remove(seq)
@@ -63,7 +66,7 @@ class Trajectory_Dataloader():
 
         print("Creating pre-processed data from raw data.")
 
-        # self.traject_preprocess('train')
+        # self.traject_preprocess('train')  # todo not commented out in orginal!
         # self.traject_preprocess('test')
         print("Done.")
 
@@ -112,9 +115,9 @@ class Trajectory_Dataloader():
         # For each dataset
         for seti, directory in enumerate(data_dirs):
             if setname == 'train':
-                file_path = os.path.join(TRAIN_DATA_PATH, directory, 'gt/gt.txt')
+                file_path = os.path.join(self.train_data_path, directory, 'gt/gt.txt')
             else:
-                file_path = os.path.join(TEST_DATA_PATH, directory, 'gt/gt.txt')
+                file_path = os.path.join(self.test_data_path, directory, 'gt/gt.txt')
             # Load the data from the csv file
             # data = np.genfromtxt(file_path, delimiter=',')
             # data = np.loadtxt(file_path, dtype=np.float32, delimiter=',')

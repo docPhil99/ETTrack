@@ -4,7 +4,7 @@ import os
 
 import torch
 import yaml
-
+from pathlib import Path
 from src.processor import processor
 
 from transformer.Models import *
@@ -27,11 +27,12 @@ def get_parser():
     parser.add_argument('--save_dir')
     parser.add_argument('--model_dir')
     parser.add_argument('--config')
+
     parser.add_argument('--using_cuda', default=True, type=ast.literal_eval)
     parser.add_argument('--test_set', default='MOT17', type=str,
                         help='Set this value to [eth, hotel, zara1, zara2, univ] for ETH-univ, ETH-hotel, UCY-zara01, UCY-zara02, UCY-univ')
     parser.add_argument('--base_dir', default='.', help='Base directory including these scripts.')
-    parser.add_argument('--save_base_dir', default='/home/hxd/HybridSORT/STAR/output/', help='Directory for saving caches and models.')
+    parser.add_argument('--save_base_dir', default='output2/', help='Directory for saving caches and models.')
     parser.add_argument('--phase', default='train', help='Set this value to \'train\' or \'test\'')
     parser.add_argument('--train_model', default='star', help='Your model name')
     parser.add_argument('--load_model', default=None, type=str, help="load pretrained model for test or training")
@@ -66,6 +67,8 @@ def get_parser():
     parser.add_argument('-n_layers', type=int, default=6)
     parser.add_argument('-dropout', type=float, default=0.1)
 
+    parser.add_argument('-data_dir',type=str, default='../datasets')
+
     return parser
 
 
@@ -99,6 +102,7 @@ def save_arg(args):
 
 if __name__ == '__main__':
     print(torch.__version__)
+    print(f'cwd: {Path().cwd()}')
     parser = get_parser()
     p = parser.parse_args()
    # p.batch_around_ped = 16
@@ -110,7 +114,7 @@ if __name__ == '__main__':
         save_arg(p)
 
     args = load_arg(p)
-
+    print(args)
     torch.cuda.set_device(0)
 
     trainer = processor(args)

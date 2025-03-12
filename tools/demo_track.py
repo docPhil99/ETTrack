@@ -264,7 +264,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     #                                 delta_t=args.deltat,
     #                                 inertia=args.inertia)
     #tracker = Sort_star_score(args, det_thresh=args.track_thresh, iou_threshold=args.iou_thresh)
-    tracker = byte_tp(net, args)
+    tracker = byte_tp(net, args)    # XH
     timer = Timer()
     frame_id = 0
     results = []
