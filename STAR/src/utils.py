@@ -66,8 +66,8 @@ class Trajectory_Dataloader():
 
         print("Creating pre-processed data from raw data.")
 
-        # self.traject_preprocess('train')  # todo not commented out in orginal!
-        # self.traject_preprocess('test')
+        self.traject_preprocess('train')  # todo not commented out in orginal!
+        #self.traject_preprocess('test')
         print("Done.")
 
         # Load the processed data from the pickle file
