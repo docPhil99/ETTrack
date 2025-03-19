@@ -6,9 +6,9 @@ import os
 import numpy as np
 import json
 import cv2
+from pathlib import Path
 
-
-DATA_PATH = 'datasets/dancetrack'
+DATA_PATH = '/home/phil/python/ETTrack/ETTrack/datasets/dancetrack'
 OUT_PATH = os.path.join(DATA_PATH, 'annotations')
 # SPLITS = ['train', 'val', 'test']
 SPLITS = ['train', "val", "test"]
@@ -32,9 +32,12 @@ if __name__ == '__main__':
             if '.DS_Store' in seq or '.ipy' in seq:
                 continue
 
+
             video_cnt += 1  # video sequence number.
             out['videos'].append({'id': video_cnt, 'file_name': seq})
             seq_path = os.path.join(data_path, seq)
+            if not os.path.isdir(seq_path):   # PMB
+                continue
             img_path = os.path.join(seq_path, 'img1')
             ann_path = os.path.join(seq_path, 'gt/gt.txt')
             images = os.listdir(img_path)

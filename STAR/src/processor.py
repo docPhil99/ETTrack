@@ -36,8 +36,8 @@ class processor(object):
 
         if self.args.using_cuda:
             self.net = self.net.cuda()
-            self.net1 = self.net1.cuda()
-            self.net2 = self.net2.cuda()
+            # self.net1 = self.net1.cuda()
+            # self.net2 = self.net2.cuda()
 
         else:
             self.net = self.net.cpu()
@@ -103,16 +103,16 @@ class processor(object):
             # test_error, test_final_error = self.test_epoch()
 
             self.net.train()
-            self.net1.train()
-            self.net2.train()
+            # self.net1.train()
+            # self.net2.train()
 
             train_loss, train1_loss = self.train_epoch(epoch)
 
             self.save_model(epoch)
             if epoch >= self.args.start_test:
                 self.net.eval()
-                self.net1.eval()
-                self.net2.eval()
+                # self.net1.eval()
+                # self.net2.eval()
                 test_error, test_final_error = self.test_epoch()
                 self.best_ade = test_error if test_final_error < self.best_fde else self.best_ade
                 self.best_epoch = epoch if test_final_error < self.best_fde else self.best_epoch
@@ -162,7 +162,7 @@ class processor(object):
             outputs_ = batch_abs.cpu().tolist()
             batch_offset = batch_abs[1:] - batch_abs[0]
             batch_offset_ = batch_offset.cpu().tolist()
-            inputs_forward = batch_abs, batch_offset[:-1], seq_list[1:-1], nei_list[1:-1], nei_num[1:-1], batch_pednum
+            inputs_forward = batch_abs, batch_offset[:-1], seq_list[1:-1],  batch_pednum
 
 ########################################################################################################
 

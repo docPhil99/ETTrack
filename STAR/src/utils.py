@@ -18,7 +18,7 @@ class Trajectory_Dataloader():
 
         if self.args.dataset == 'MOT17':
             self.train_data_path = self.data_dir/Path('MOT17/train')
-            self.test_data_path = self.data_dir / Path('MOT17/test')
+            self.test_data_path = self.data_dir / Path('MOT17/val')
 
             self.data_dirs = os.listdir(self.train_data_path)
             test_dirs = os.listdir(self.test_data_path)
@@ -67,7 +67,7 @@ class Trajectory_Dataloader():
         print("Creating pre-processed data from raw data.")
 
         self.traject_preprocess('train')  # todo not commented out in orginal!
-        #self.traject_preprocess('test')
+        self.traject_preprocess('test')
         print("Done.")
 
         # Load the processed data from the pickle file
@@ -75,11 +75,11 @@ class Trajectory_Dataloader():
         if not (os.path.exists(self.train_batch_cache)):
             self.frameped_dict, self.pedtraject_dict = self.load_dict(self.train_data_file)
             self.dataPreprocess('train')
-            # self.trainbatch, self.trainbatchnums = self.dataPreprocess('train')
+            #self.trainbatch, self.trainbatchnums = self.dataPreprocess('train')
         if not (os.path.exists(self.test_batch_cache)):
             self.test_frameped_dict, self.test_pedtraject_dict = self.load_dict(self.test_data_file)
             self.dataPreprocess('test')
-            # self.testbatch, self.testbatchnums = self.dataPreprocess('test')
+            #self.testbatch, self.testbatchnums = self.dataPreprocess('test')
 
         self.trainbatch, self.trainbatchnums, _, _ = self.load_cache(self.train_batch_cache)
         self.testbatch, self.testbatchnums, _, _ = self.load_cache(self.test_batch_cache)
@@ -97,8 +97,8 @@ class Trajectory_Dataloader():
         data_dirs : List of directories where raw data resides
         data_file : The file into which all the pre-processed data needs to be stored
         '''
-        TRAIN_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/train'
-        TEST_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/val'
+        # TRAIN_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/train'
+        # TEST_DATA_PATH = '/home/hxd/HybridSORT/datasets/MOT17/val'
         if setname == 'train':
             data_dirs = self.train_dir
             data_file = self.train_data_file
@@ -608,13 +608,13 @@ class Trajectory_Dataloader():
 
         :rtype ious np.ndarray
         """
-        ious = np.zeros((len(atlbrs), len(btlbrs)), dtype=np.float)
+        ious = np.zeros((len(atlbrs), len(btlbrs)), dtype=float)
         if ious.size == 0:
             return ious
 
         ious = bbox_ious(
-            np.ascontiguousarray(atlbrs, dtype=np.float),
-            np.ascontiguousarray(btlbrs, dtype=np.float)
+            np.ascontiguousarray(atlbrs, dtype=float),
+            np.ascontiguousarray(btlbrs, dtype=float)
         )
 
         return ious

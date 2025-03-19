@@ -13,9 +13,7 @@ from yolox.utils import (
     xyxy2xywh
 )
 from trackers.byte_tracker.byte_tracker import BYTETracker
-from trackers.ocsort_tracker.ocsort import OCSort
-from trackers.deepsort_tracker.deepsort import DeepSort
-from trackers.motdt_tracker.motdt_tracker import OnlineTracker
+
 
 import contextlib
 import io

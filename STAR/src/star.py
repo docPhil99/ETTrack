@@ -483,10 +483,10 @@ class STAR(torch.nn.Module):
             mean_x1 = torch.mean(node_abs[st:ed, :, 2])
             mean_y1 = torch.mean(node_abs[st:ed, :, 3])
 
-            mean_0x = torch.mean(node_abs[st:ed, :, 4])
-            mean_0y = torch.mean(node_abs[st:ed, :, 5])
-            mean_0x1 = torch.mean(node_abs[st:ed, :, 6])
-            mean_0y1 = torch.mean(node_abs[st:ed, :, 7])
+            # mean_0x = torch.mean(node_abs[st:ed, :, 4])
+            # mean_0y = torch.mean(node_abs[st:ed, :, 5])
+            # mean_0x1 = torch.mean(node_abs[st:ed, :, 6])
+            # mean_0y1 = torch.mean(node_abs[st:ed, :, 7])
             #
             # std_x = torch.std(node_abs[st:ed, :, 0])
             # std_y = torch.std(node_abs[st:ed, :, 1])
@@ -503,13 +503,13 @@ class STAR(torch.nn.Module):
             node_abs[st:ed, :, 2] = (node_abs[st:ed, :, 2] - mean_x1)
             node_abs[st:ed, :, 3] = (node_abs[st:ed, :, 3] - mean_y1)
 
-            node_abs[st:ed, :, 4] = (node_abs[st:ed, :, 4] - mean_0x)
-            node_abs[st:ed, :, 5] = (node_abs[st:ed, :, 5] - mean_0y)
-            node_abs[st:ed, :, 6] = (node_abs[st:ed, :, 6] - mean_0x1)
-            node_abs[st:ed, :, 7] = (node_abs[st:ed, :, 7] - mean_0y1)
+            # node_abs[st:ed, :, 4] = (node_abs[st:ed, :, 4] - mean_0x)
+            # node_abs[st:ed, :, 5] = (node_abs[st:ed, :, 5] - mean_0y)
+            # node_abs[st:ed, :, 6] = (node_abs[st:ed, :, 6] - mean_0x1)
+            # node_abs[st:ed, :, 7] = (node_abs[st:ed, :, 7] - mean_0y1)
 
-            nomalize = [mean_x, mean_y, mean_x1, mean_y1, mean_0x, mean_0y, mean_0x1, mean_0y1]
-
+            #nomalize = [mean_x, mean_y, mean_x1, mean_y1, mean_0x, mean_0y, mean_0x1, mean_0y1]
+            nomalize = [mean_x, mean_y, mean_x1, mean_y1]
             #nomalize = [mean_x, mean_y, mean_x1, mean_y1, std_x, std_y, std_x1, std_y1]
             nomlize_all.append(nomalize)
         return node_abs.permute(1, 0, 2), nomlize_all

@@ -18,18 +18,13 @@ from trackers.byte_tracker.tp_tracker import TPTracker
 from trackers.byte_tracker.byte_tp import byte_tp
 from trackers.byte_tracker.byte_tp_score import byte_tp_score
 from trackers.byte_tracker.byte_tracker_score import BYTETracker_score
-from trackers.ocsort_tracker.ocsort import OCSort
+
 from trackers.hybrid_sort_tracker.hybrid_sort import Hybrid_Sort
 from trackers.hybrid_sort_tracker.hybrid_sort_reid import Hybrid_Sort_ReID
 from trackers.sort_tracker.sort import Sort
 from trackers.sort_tracker.sort_star import Sort_star
 from trackers.sort_tracker.sort_score import Sort_score
 from trackers.sort_tracker.sort_star_score import Sort_star_score
-
-from trackers.deepsort_tracker.deepsort import DeepSort
-from trackers.deepsort_tracker.deepsort_score import DeepSort_score
-from trackers.motdt_tracker.motdt_tracker import OnlineTracker
-from trackers.motdt_tracker.motdt_tracker_score import OnlineTracker_score
 
 import contextlib
 import io
@@ -41,7 +36,7 @@ import time
 import cv2
 import numpy as np
 from utils.utils import write_results, write_results_no_score
-from fast_reid.fast_reid_interfece import FastReIDInterface
+#from fast_reid.fast_reid_interfece import FastReIDInterface
 
 class MOTEvaluator:
     """

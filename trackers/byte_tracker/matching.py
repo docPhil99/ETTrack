@@ -241,7 +241,7 @@ def ct_dist(bboxes1, bboxes2):
         return ct_dist.max() - ct_dist
 
 def c_dist(trackers, detections):
-    dist_matrix = np.zeros((len(trackers), len(detections)), dtype=np.float32)
+    dist_matrix = np.zeros((len(trackers), len(detections)), dtype=float32)
     for d,trk in enumerate(trackers):
         for t,det in enumerate(detections):
             dist_matrix[d,t] = l2_dist(trk,det)

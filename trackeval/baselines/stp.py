@@ -49,7 +49,7 @@ def track_sequence(seq_file):
 
         # Initialize container for holding previously tracked objects.
         prev = {'boxes': np.empty((0, 4)),
-                'ids': np.array([], np.int),
+                'ids': np.array([], dtype=int),
                 'timesteps': np.array([])}
 
         # Run tracker for each timestep.

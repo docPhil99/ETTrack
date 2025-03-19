@@ -11,15 +11,12 @@ from yolox.utils import (
     time_synchronized,
     xyxy2xywh
 )
-from trackers.ocsort_tracker.ocsort import OCSort
+
 from trackers.sort_tracker.sort import Sort
 from trackers.sort_tracker.sort_score import Sort_score
-from trackers.motdt_tracker.motdt_tracker import OnlineTracker
-from trackers.motdt_tracker.motdt_tracker_score import OnlineTracker_score
 from trackers.byte_tracker.byte_tracker_score import BYTETracker_score
 from trackers.byte_tracker.byte_tracker import BYTETracker
-from trackers.deepsort_tracker.deepsort import DeepSort
-from trackers.deepsort_tracker.deepsort_score import DeepSort_score
+
 
 import contextlib
 import io

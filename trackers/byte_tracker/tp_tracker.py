@@ -37,7 +37,7 @@ class STrack(BaseTrack):
     def __init__(self, tlwh, score, occluded_val=False):
 
         # wait activate
-        self._tlwh = np.asarray(tlwh, dtype=np.float)
+        self._tlwh = np.asarray(tlwh, dtype=float)
         # self.kalman_filter = None
         # self.mean, self.covariance = None, None
         self.is_activated = False
@@ -282,7 +282,7 @@ class TPTracker(object):
                     c_x, b_y = strack_pool[i].pred_traj[pred_traj_index]
                     _,_,w,h = strack_pool[i].last_tlbr
 
-                    strack_pool[i]._tlwh = np.asarray([c_x - (w/2), b_y - h, w, h], dtype=np.float)
+                    strack_pool[i]._tlwh = np.asarray([c_x - (w/2), b_y - h, w, h], dtype=float)
                     
                 strack_pool[i].pred_traj = [[]]
                 strack_pool[i].overlap_len = 0

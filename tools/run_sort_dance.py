@@ -49,6 +49,7 @@ def main(exp, args, num_gpu, net):
             "You have chosen to seed testing. This will turn on the CUDNN deterministic setting, "
         )
 
+    print(f'cwd {Path.cwd()}')
     is_distributed = num_gpu > 1
 
     # set environment variables for distributed training
@@ -108,7 +109,7 @@ def main(exp, args, num_gpu, net):
             ckpt_file = os.path.join(file_name, "best_ckpt.pth.tar")
         else:
             ckpt_file = args.ckpt
-        logger.info("loading checkpoint")
+        logger.info(f"loading checkpoint: {ckpt_file}")
         loc = "cuda:{}".format(rank)
         ckpt = torch.load(ckpt_file, map_location=loc)
         # load the model state dict
