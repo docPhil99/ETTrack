@@ -20,17 +20,22 @@ def get_vels(glob_pattern):
     return flat_vels
 
 flat_vels_dance = get_vels('output/dance*.json')
-flat_vels_mot = get_vels('output/MOT*.json')
-
+flat_vels_mot = get_vels('output/MOT20*.json')
+flat_vels_mot17 = get_vels('output/MOT17*.json')
 counts, bins = np.histogram(flat_vels_dance,bins=30,range=(0,50))
 counts_mot, bins_mot = np.histogram(flat_vels_mot,bins=30,range=(0,50))
+counts_mot17, bins_mot17 = np.histogram(flat_vels_mot17,bins=30,range=(0,50))
 
 bins_mot = bins_mot*20/25  # correct for frame rate
+bins_mot17 = bins_mot17*20/25
 counts = counts /sum(counts)
 counts_mot = counts_mot /sum(counts_mot)
+counts_mot17 = counts_mot17/sum(counts_mot17)
 fig = plt.figure(figsize= (6.4, 4.8))
 plt.stairs(counts, bins)
 plt.stairs(counts_mot, bins_mot)
+plt.stairs(counts_mot17, bins_mot17)
+
 plt.xlabel('Pixel Velocity pixel/frame')
 plt.ylabel('Normalised counts')
 plt.show()

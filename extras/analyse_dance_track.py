@@ -6,7 +6,7 @@ import json
 
 #base_path=Path('/home/phil/datasets/MOT/dancetrack/train/train1')
 base_path=Path('/home/phil/datasets/MOT/MOT20')
-
+base_path=Path('/home/phil/datasets/MOT/MOT17/train')
 for paths in base_path.iterdir():
     print(paths)
     imgs =  paths/Path('img1')
@@ -28,19 +28,25 @@ for paths in base_path.iterdir():
         print(gt1_indx)
         img_path = paths/Path(f'img1/{gt1_indx:06}.jpg')
         print(img_path)
-        img = cv2.imread(str(img_path))
+        if img_path.is_file():
+            draw_img = True
+            img = cv2.imread(str(img_path))
+        else:
+            draw_img = False
         bboxes = data[gt1_indx]
         centres = []
         for bbox in bboxes:
-            img = cv2.rectangle(img, (bbox[2],bbox[3]), (bbox[2]+bbox[4],bbox[3]+bbox[5]), (0,255,0),2)
             center = (bbox[1], bbox[2]+bbox[4]//2,bbox[3]+bbox[5]//2)  # id, x, y
             centres.append(center)
-            img = cv2.circle(img,center[1:],5,(0,0,255),-1)
+            if draw_img:
+                img = cv2.rectangle(img, (bbox[2], bbox[3]), (bbox[2] + bbox[4], bbox[3] + bbox[5]), (0, 255, 0), 2)
+                img = cv2.circle(img,center[1:],5,(0,0,255),-1)
         centre_loc[gt1_indx]=centres
-        cv2.imshow('img',img)
-        if cv2.waitKey(10)==ord('q'):
-            cv2.destroyAllWindows()
-            break
+        if draw_img:
+            cv2.imshow('img',img)
+            if cv2.waitKey(10)==ord('q'):
+                cv2.destroyAllWindows()
+                break
 
     velocity={}
     for gt1_indx in centre_loc:
