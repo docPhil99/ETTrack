@@ -1,3 +1,6 @@
+# python tools/run_sort_dance.py -f /home/phil/python/ETTrack/ETTrack/exps/example/mot/yolox_dancetrack_val.py -c pretrained_model/ocsort_dance_model.pth.tar  //
+# -b  1  -d  1 --fp16 --fuse --expn test
+
 from loguru import logger
 
 import torch
