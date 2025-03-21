@@ -3,10 +3,18 @@ import numpy as np
 from pathlib import Path
 import math
 import json
+import configparser
 
-#base_path=Path('/home/phil/datasets/MOT/dancetrack/train/train1')
-base_path=Path('/home/phil/datasets/MOT/MOT20')
-base_path=Path('/home/phil/datasets/MOT/MOT17/train')
+from skimage.color.rgb_colors import steelblue
+
+#from extras.plot_velocity import frame_rate
+
+base_path=Path('/home/phil/datasets/MOT/dancetrack/train/train1')
+base_path=Path('/home/phil/datasets/MOT/MOT20/train')
+#base_path=Path('/home/phil/datasets/MOT/MOT17/train')
+#base_path=Path('/home/phil/datasets/MOT/SportsMOT/sportsmot_publish/dataset/train')
+stub_name = 'sports_'  # set to '' to use just path.stem
+stub_name='MOT20'
 for paths in base_path.iterdir():
     print(paths)
     imgs =  paths/Path('img1')
@@ -16,6 +24,11 @@ for paths in base_path.iterdir():
         gt_s = f.readlines()
     gt = [[int(float(val.rstrip())) for val in line.split(',')] for line in gt_s]
 
+    # get the frame rate
+    seqinfo_file = paths/Path('seqinfo.ini')
+    config = configparser.ConfigParser()
+    config.read_file(open(seqinfo_file))
+    fps = float(config['Sequence']['frameRate'])
     # convert to dict, with frame number as key
     data={}
     for fr in gt:
@@ -65,10 +78,12 @@ for paths in base_path.iterdir():
                 vel2 = centre_loc[gt1_indx-1][vel2_ind]
                 print(f'vel2 {vel2}')
                 vel = math.sqrt((vel1[1]-vel2[1])**2+(vel1[2]-vel2[2])**2)
+                vel = vel / fps * 25
                 vels.append(vel)
             velocity[gt1_indx]=vels
             print(velocity[gt1_indx])
-    out_file = Path('output')/Path(f'{paths.stem}_dance_track.json')
+
+    out_file = Path('output')/Path(f'{stub_name}{paths.stem}_dance_track.json')
     with open(out_file, 'w') as f:
         json.dump(velocity,f)
 
