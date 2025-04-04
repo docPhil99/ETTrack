@@ -21,9 +21,9 @@ def _get_vels(glob_pattern):
     flat_vels = list(np.concatenate(vels))
     return flat_vels
 
-def get_normalised_bins(glob_pattern, frame_rate_correction=1):
+def get_normalised_bins(glob_pattern, frame_rate_correction=1,range=(0,50)):
     vels = _get_vels(glob_pattern)
-    c,b = np.histogram(vels,bins=30,range=(0,50))
+    c,b = np.histogram(vels,bins=30,range=range)
     b = b*frame_rate_correction
     c = c/sum(c)
     return c,b
@@ -43,14 +43,32 @@ def get_normalised_bins(glob_pattern, frame_rate_correction=1):
 #counts_mot17 = counts_mot17/sum(counts_mot17)
 
 fig = plt.figure(figsize= (6.4, 4.8))
-glob_list = ['output/dance*.json', 'output/MOT20*.json', 'output/MOT17*.json','output/sport*.json']
+glob_list = ['output/dance*dance_track.json', 'output/MOT20*dance_track.json']#, 'output/MOT17*dance_track.json','output/sport*dance_track.json']
 correction = [1,1,1,1]
-label = ['DanceTrack','MOT20','MOT17','SportsMOT']
+label = ['DanceTrack','MOT20']#,'MOT17','SportsMOT']
+#
+# for g,lab in zip(glob_list,label):
+#     corr=1
+#     print(f'Processing {g}, correction {corr}')
+#     counts,bins = get_normalised_bins(g,corr)
+#     plt.stairs(counts, bins,label=lab)
+#
+# plt.xlabel('Pixel Velocity pixel/frame')
+# plt.ylabel('Normalised counts')
+# plt.legend()
+# plt.show()
+# fig.savefig('awesome_figure.png', dpi=300, bbox_inches='tight')
+#
+
+fig = plt.figure(figsize= (6.4, 4.8))
+glob_list = ['output/dance*angle_track.json', 'output/MOT17*dance_track.json','output/sport*dance_track.json']
+correction = [1,1,1,1]
+label = ['DanceTrack','MOT17','SportsMOT']
 #frame_rate = [25,20,14,25]
 for g,lab in zip(glob_list,label):
     corr=1
     print(f'Processing {g}, correction {corr}')
-    counts,bins = get_normalised_bins(g,corr)
+    counts,bins = get_normalised_bins(g,corr,range=(0,360))
     plt.stairs(counts, bins,label=lab)
 
 #plt.stairs(counts_mot, bins_mot)
@@ -60,4 +78,4 @@ plt.xlabel('Pixel Velocity pixel/frame')
 plt.ylabel('Normalised counts')
 plt.legend()
 plt.show()
-fig.savefig('awesome_figure.png', dpi=300, bbox_inches='tight')
+fig.savefig('angle_figure.png', dpi=300, bbox_inches='tight')
