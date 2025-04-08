@@ -1,7 +1,7 @@
 import argparse
 import ast
 import os
-
+from loguru import logger
 import torch
 import yaml
 
@@ -64,13 +64,15 @@ def get_parser():
     parser.add_argument('-n_head', type=int, default=8)
     parser.add_argument('-n_layers', type=int, default=6)
     parser.add_argument('-dropout', type=float, default=0.1)
-
+    logger.debug('created parser')
     return parser
 
 
 def load_arg(p):
     # save arg
+    logger.info(f'Attemping to load {p.config}')
     if os.path.exists(p.config):
+        logger.info(f'Loading config: {p.config}')
         with open(p.config, 'r') as f:
             default_arg = yaml.load(f, Loader=yaml.FullLoader)
         key = vars(p).keys()
@@ -84,6 +86,7 @@ def load_arg(p):
         parser.set_defaults(**default_arg)
         return parser.parse_args()
     else:
+        logger.debug('No config file to load')
         return False
 
 
@@ -92,12 +95,13 @@ def save_arg(args):
     arg_dict = vars(args)
     if not os.path.exists(args.model_dir):
         os.makedirs(args.model_dir)
+    logger.info(f"Saving config {args.config}")
     with open(args.config, 'w') as f:
         yaml.dump(arg_dict, f)
 
 
 if __name__ == '__main__':
-    print(torch.__version__)
+    logger.debug(f'Starting trainval with torch version {torch.__version__}')
     parser = get_parser()
     p = parser.parse_args()
    # p.batch_around_ped = 16
@@ -114,7 +118,9 @@ if __name__ == '__main__':
     trainer = processor(args)
 
     if args.phase == 'test':
+        logger.info('Starting test phase')
         net = trainer.test()
         print("well,done")
     else:
+        logger.info('Starting training phase')
         trainer.train()
