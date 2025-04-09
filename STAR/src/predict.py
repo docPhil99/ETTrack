@@ -10,6 +10,7 @@ from .utils import *
 import torch.nn.functional as F
 
 from tqdm import tqdm
+from loguru import logger
 CUDA_LAUNCH_BLOCKING = 1
 from STAR.transformer.Models import Transformer
 
@@ -69,18 +70,24 @@ class predict(object):
         }, model_path)
 
     def load_model(self):
-
-        if self.args.load_model is not None:
-            self.args.model_save_path = self.args.save_dir + '/' + self.args.train_model + '/' + self.args.train_model + '_' + \
+        if self.args.ettrack_model_path:
+            self.args.model_save_path = self.args.ettrack_model_path
+        else:
+            logger.info(f'Loading model from {self.args.load_model}')
+            if self.args.load_model is not None:
+                self.args.model_save_path = self.args.save_dir + '/' + self.args.train_model + '/' + self.args.train_model + '_' + \
                                         str(self.args.load_model) + '.tar'
-            print(self.args.model_save_path)
-            if os.path.isfile(self.args.model_save_path):
-                print('Loading checkpoint')
-                checkpoint = torch.load(self.args.model_save_path)
-                model_epoch = checkpoint['epoch']
-                #self.net_sort.load_state_dict(checkpoint['state_dict'])
-                self.tcn_transformer.load_state_dict(checkpoint['state_dict'])
-                print('Loaded checkpoint at epoch', model_epoch)
+                logger.info(f'Generated model save path: {self.args.model_save_path}')
+        if os.path.isfile(self.args.model_save_path):
+            print('Loading checkpoint')
+            checkpoint = torch.load(self.args.model_save_path)
+            model_epoch = checkpoint['epoch']
+            #self.net_sort.load_state_dict(checkpoint['state_dict'])
+            self.tcn_transformer.load_state_dict(checkpoint['state_dict'])
+            print('Loaded checkpoint at epoch', model_epoch)
+        else:
+            logger.error(f'No model file at {self.args.load_model}')
+
 
     def set_optimizer(self):
 

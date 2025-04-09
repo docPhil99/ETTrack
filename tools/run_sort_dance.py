@@ -52,7 +52,7 @@ def main(exp, args, num_gpu, net):
             "You have chosen to seed testing. This will turn on the CUDNN deterministic setting, "
         )
 
-    print(f'cwd {Path.cwd()}')
+    logger.debug(f'cwd {Path.cwd()}')
     is_distributed = num_gpu > 1
 
     # set environment variables for distributed training
@@ -75,7 +75,7 @@ def main(exp, args, num_gpu, net):
     if args.tsize is not None:
         exp.test_size = (args.tsize, args.tsize)
 
-    model = exp.get_model()
+    model = exp.get_model()   #yolo
     logger.info("Model Summary: {}".format(get_model_info(model, exp.test_size)))
 
     val_loader = exp.get_eval_loader(args.batch_size, is_distributed, args.test)
@@ -196,20 +196,23 @@ def main(exp, args, num_gpu, net):
 
 
 if __name__ == "__main__":
+    logger.info('Starting ETTrack test')
     args = make_parser().parse_args()
+    logger.info(f'args:{args}')
     exp = get_exp(args.exp_file, args.name)
     exp.merge(args.opts)
 
     if not args.expn:
         args.expn = exp.exp_name
-
+    logger.info(f'exp {exp}')
     num_gpu = torch.cuda.device_count() if args.devices is None else args.devices
     assert num_gpu <= torch.cuda.device_count()
     args.save_dir = args.save_base_dir + str(args.test_set) + '/'
     args.model_dir = args.save_base_dir + str(args.test_set) + '/' + args.train_model + '/'
 
+    # create the ETTrack predictor
     trainer = predict(args)
-    net = trainer.test()
+    net = trainer.test()   #returns tnc_transformer
 
     launch(
         main,

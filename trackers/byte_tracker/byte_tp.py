@@ -186,7 +186,7 @@ class STrack(BaseTrack):
     def __repr__(self):
         return 'OT_{}_({}-{})'.format(self.track_id, self.start_frame, self.end_frame)
 
-
+# xudong's modified bytetracker
 class byte_tp(object):
     def __init__(self, net, args):
         self.tracked_stracks = []  # type: list[STrack]
@@ -407,6 +407,7 @@ class byte_tp(object):
         #occluded_val_list = check_occlusion(detections_tlbr)
 
         # Process occlusion
+        #Call the actual TCN_Transfomer
         if self.frame_id >1:
             strack_pool = self.process_tp(strack_pool) # process about strack_pool's _tlwh
         

@@ -57,9 +57,9 @@ class Trajectory_Dataloader():
             self.test_frameped_dict, self.test_pedtraject_dict = self.load_dict(self.test_data_file)
             #self.dataPreprocess('test')
             self.testbatch, self.testbatchnums = self.dataPreprocess('test')
-        # self.trainbatch, self.trainbatchnums, _, _ = self.load_cache(self.train_batch_cache)
-        # self.testbatch, self.testbatchnums, _, _ = self.load_cache(self.test_batch_cache)
-        # print("Done.")
+        self.trainbatch, self.trainbatchnums, _, _ = self.load_cache(self.train_batch_cache) #PMB
+        self.testbatch, self.testbatchnums, _, _ = self.load_cache(self.test_batch_cache) #PMB
+        print("Done.")
 
         print('Total number of training batches:', self.trainbatchnums)
         print('Total number of test batches:', self.testbatchnums)
@@ -264,10 +264,13 @@ class Trajectory_Dataloader():
         valbatch = self.get_seq_from_index_balance(frameped_dict, pedtraject_dict, val_index, setname)
         valbatchnums = len(valbatch)
 
+
+        #PMB added save back
+        f = open(cachefile, "wb")
+        pickle.dump((trainbatch, trainbatchnums, valbatch, valbatchnums), f, protocol=2)
+        f.close()
+
         return trainbatch, trainbatchnums
-        # f = open(cachefile, "wb")
-        # pickle.dump((trainbatch, trainbatchnums, valbatch, valbatchnums), f, protocol=2)
-        # f.close()
 
     def get_seq_from_index_balance(self, frameped_dict, pedtraject_dict, data_index, setname):
         '''

@@ -1,5 +1,7 @@
 import argparse
 import ast
+from pathlib import Path
+
 def make_parser():
     parser = argparse.ArgumentParser("OC-SORT parameters")
     parser.add_argument("--expn", type=str, default=None)
@@ -129,6 +131,7 @@ def make_parser():
                         help='Directory for saving caches and models.')
     parser.add_argument('--phase', default='train', help='Set this value to \'train\' or \'test\'')
     parser.add_argument('--train_model', default='star', help='Your model name')
+    parser.add_argument('--ettrack_model_path',type=Path , help='Your model name')
     parser.add_argument('--load_model', default=1616, type=str, help="load pretrained model for test or training")
     # 15: add scores  10:use sportmot 8:dancetrack  7:add scores(use sigmoid)
     # 9: add scores(use sigmoid and input contain socore)

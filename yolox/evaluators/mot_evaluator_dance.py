@@ -237,7 +237,7 @@ class MOTEvaluator:
                 is_time_record = cur_iter < len(self.dataloader) - 1
                 if is_time_record:
                     start = time.time()
-
+                # get detector outputs
                 outputs = model(imgs)
                 if decoder is not None:
                     outputs = decoder(outputs, dtype=outputs.type())

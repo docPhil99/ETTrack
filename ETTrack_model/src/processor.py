@@ -79,11 +79,13 @@ class processor(object):
         print('Testing begin')
         self.load_model()
         self.net.eval()
+        #return self.net
+        test_error, test_final_error = self.test_epoch()
+        print('Set: {}, epoch: {},test_error: {} test_final_error: {}'.format(self.args.test_set,
+                                                                                           self.args.load_model,
+                                                                                    test_error, test_final_error))
         return self.net
-        # test_error, test_final_error = self.test_epoch()
-        # print('Set: {}, epoch: {},test_error: {} test_final_error: {}'.format(self.args.test_set,
-        #                                                                                   self.args.load_model,
-        #                                                                                test_error, test_final_error))
+
     def train(self):
 
         print('Training begin')
