@@ -344,16 +344,16 @@ class TransformerModel(nn.Module):
 
         return output
 
-# class AttentionWeights(nn.Module):
-#     def __init__(self, tcn_feature_dim, transformer_feature_dim):
-#         super(AttentionWeights, self).__init__()
-#         self.fc = nn.Linear(tcn_feature_dim + transformer_feature_dim, 2)  # 2表示TCN和Transformer的特征数
-#
-#     def forward(self, tcn_feature, transformer_feature):
-#         combined_feature = torch.cat((tcn_feature, transformer_feature), dim=1)  # 特征拼接
-#         attention_scores = self.fc(combined_feature)  # 计算注意力分数
-#         attention_weights = F.softmax(attention_scores, dim=1)  # 应用softmax
-#         return attention_weights
+class AttentionWeights(nn.Module):
+    def __init__(self, tcn_feature_dim, transformer_feature_dim):
+        super(AttentionWeights, self).__init__()
+        self.fc = nn.Linear(tcn_feature_dim + transformer_feature_dim, 2)  # 2表示TCN和Transformer的特征数
+
+    def forward(self, tcn_feature, transformer_feature):
+        combined_feature = torch.cat((tcn_feature, transformer_feature), dim=1)  # 特征拼接
+        attention_scores = self.fc(combined_feature)  # 计算注意力分数
+        attention_weights = F.softmax(attention_scores, dim=1)  # 应用softmax
+        return attention_weights
 
 class tcn_transformer(torch.nn.Module):
 
@@ -380,9 +380,9 @@ class tcn_transformer(torch.nn.Module):
         levels = 4
         nhid = 32
         channel_sizes = levels * [nhid]
-        self.tcn = TemporalConvNet(input_channels, channel_sizes, kernel_size=7, dropout=0)
+        self.tcn = TemporalConvNet(input_channels, channel_sizes, kernel_size=7, dropout=0.2)
 
-        #self.attention = AttentionWeights(32, 32)
+        self.attention = AttentionWeights(32, 32)
         ##################################################
 
         self.spatial_encoder_1 = TransformerModel(emsize, nhead, nhid, nlayers, dropout)

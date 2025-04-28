@@ -1,5 +1,6 @@
-# python tools/run_sort_dance.py -f /home/phil/python/ETTrack/ETTrack/exps/example/mot/yolox_dancetrack_val.py -c pretrained_model/ocsort_dance_model.pth.tar  //
+# python tools/run_ettrack_dance.py -f /home/phil/python/ETTrack/ETTrack/exps/example/mot/yolox_dancetrack_val.py -c pretrained_model/ocsort_dance_model.pth.tar  //
 # -b  1  -d  1 --fp16 --fuse --expn test
+import sys
 
 from loguru import logger
 
@@ -165,31 +166,39 @@ def main(exp, args, num_gpu, net):
         return 
 
     # if we evaluate on validation set, 
-    logger.info("\n" + summary)
-    hota_command = "python3 TrackEval/scripts/run_mot_challenge.py " \
-                   "--SPLIT_TO_EVAL val  " \
-                   "--METRICS HOTA CLEAR Identity " \
-                   "--GT_FOLDER datasets/dancetrack/val " \
-                   "--SEQMAP_FILE datasets/dancetrack/val/val_seqmap.txt " \
-                   "--SKIP_SPLIT_FOL True " \
-                   "--TRACKERS_TO_EVAL '' " \
-                   "--TRACKER_SUB_FOLDER ''  " \
-                   "--USE_PARALLEL True " \
-                   "--NUM_PARALLEL_CORES 8 " \
-                   "--PLOT_CURVES False " \
-                   "--TRACKERS_FOLDER " + results_folder
-
-    # hota_command = "python TrackEval/scripts/run_mot_challenge.py " \
-    #                "--BENCHMARK MOT17 " \
-    #                "--SPLIT_TO_EVAL train " \
+    logger.info(f"Summary:\n{summary}")
+    # hota_command = "python3 TrackEval/scripts/run_mot_challenge.py " \
+    #                "--SPLIT_TO_EVAL val  " \
+    #                "--METRICS HOTA CLEAR Identity " \
+    #                "--GT_FOLDER datasets/dancetrack/val " \
+    #                "--SEQMAP_FILE datasets/dancetrack/val/val_seqmap.txt " \
+    #                "--SKIP_SPLIT_FOL True " \
     #                "--TRACKERS_TO_EVAL '' " \
-    #                "--METRICS HOTA CLEAR Identity VACE " \
-    #                "--TIME_PROGRESS False " \
-    #                "--USE_PARALLEL False " \
-    #                "--NUM_PARALLEL_CORES 1  " \
-    #                "--GT_FOLDER datasets/MOT17/ " \
-    #                "--TRACKERS_FOLDER " + results_folder + " " \
-    #                                                        "--GT_LOC_FORMAT {gt_folder}/{seq}/gt/gt_val_half.txt"
+    #                "--TRACKER_SUB_FOLDER ''  " \
+    #                "--USE_PARALLEL True " \
+    #                "--NUM_PARALLEL_CORES 8 " \
+    #                "--PLOT_CURVES False " \
+    #                "--TRACKERS_FOLDER " + results_folder
+    run_hota_command(results_folder)
+def run_hota_command(results_folder,exp=None,args=None):
+    if not results_folder:
+        file_name = os.path.join(exp.output_dir, args.expn)
+        result_dir = "{}_test".format(args.expn) if args.test else "{}_val".format(args.expn)
+        results_folder = os.path.join(file_name, result_dir)
+        logger.info(f"Generated results folder: {results_folder}")
+
+    hota_command = "python TrackEval/scripts/run_mot_challenge.py " \
+                   "--BENCHMARK MOT17 " \
+                   "--SPLIT_TO_EVAL train " \
+                   "--TRACKERS_TO_EVAL '' " \
+                   "--METRICS HOTA CLEAR Identity VACE " \
+                   "--TIME_PROGRESS False " \
+                   "--USE_PARALLEL False " \
+                   "--NUM_PARALLEL_CORES 1  " \
+                   "--GT_FOLDER datasets/MOT17/ " \
+                   "--TRACKERS_FOLDER " + results_folder + " " \
+                                                           "--GT_LOC_FORMAT {gt_folder}/{seq}/gt/gt_val_half.txt"
+    logger.debug(f"hota_commmand: {hota_command}")
     os.system(hota_command)
 
     logger.info('Completed')
@@ -209,6 +218,10 @@ if __name__ == "__main__":
     assert num_gpu <= torch.cuda.device_count()
     args.save_dir = args.save_base_dir + str(args.test_set) + '/'
     args.model_dir = args.save_base_dir + str(args.test_set) + '/' + args.train_model + '/'
+
+    if args.mot_eval_only:
+        run_hota_command(None,exp=exp,args=args)
+        sys.exit(0)
 
     # create the ETTrack predictor
     trainer = predict(args)

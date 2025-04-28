@@ -119,7 +119,7 @@ def make_parser():
 
     # for star
 
-    parser.add_argument('--dataset', default='dancetrack')
+    parser.add_argument('--dataset', default='MOT17')
     parser.add_argument('--save_dir')
     parser.add_argument('--model_dir')
     parser.add_argument('--config')
@@ -131,8 +131,9 @@ def make_parser():
                         help='Directory for saving caches and models.')
     parser.add_argument('--phase', default='train', help='Set this value to \'train\' or \'test\'')
     parser.add_argument('--train_model', default='star', help='Your model name')
-    parser.add_argument('--ettrack_model_path',type=Path , help='Your model name')
+    parser.add_argument('--ettrack_model_path',type= str, default='/home/phil/python/ETTrack/ETTrack/PMB_output/PMB_ETTrackTEST_MOT17/pmb_star/pmb_star_199.tar', help='Your model name')
     parser.add_argument('--load_model', default=1616, type=str, help="load pretrained model for test or training")
+    parser.add_argument('--mot_eval_only', default=False, action='store_true', help='skip everything and run the mot evaluation on pre-processed files')
     # 15: add scores  10:use sportmot 8:dancetrack  7:add scores(use sigmoid)
     # 9: add scores(use sigmoid and input contain socore)
     # 64: add scores(use sigmoid and input contain socore) use sportmot(TRAIN) to train TF,but val datasets is also sportmot(val), not dancetrack(val)
